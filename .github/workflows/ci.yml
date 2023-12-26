@@ -1,0 +1,27 @@
+name: Docker Image - Continuous Integration
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment for deployment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+      version:
+        description: 'Keycloak customization version'
+        required: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }} 
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Extract Keycloak version from Dockerfile
+      id: keycloak-version
+      run: echo "KEYCLOAK_VERSION=$(grep 'FROM quay.io/keycloak/keycloak:' Dockerfile | cut -d ':' -f 2)" >> $GITHUB_ENV
+    - name: Print Tag
+      run: echo "${{ vars.DOCKER_REGISTRY }}/nexus/keycloak:$KEYCLOAK_VERSION-${{ inputs.version }} " 
