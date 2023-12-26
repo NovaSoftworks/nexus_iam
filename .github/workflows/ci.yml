@@ -23,7 +23,9 @@ jobs:
     - name: Extract Keycloak version from Dockerfile
       id: keycloak-version
       run: echo "KEYCLOAK_VERSION=$(grep 'FROM quay.io/keycloak/keycloak:' Dockerfile | cut -d ':' -f 2)" >> $GITHUB_ENV
+    - name: Assemble Build Tag
+      run: echo "${{ vars.DOCKER_REGISTRY }}/nexus/keycloak:$KEYCLOAK_VERSION-${{ inputs.version }}"
     - name: Setup Build Tag
-      run: echo "BUILD_TAG=$(${{ vars.DOCKER_REGISTRY }}/nexus/keycloak:$KEYCLOAK_VERSION-${{ inputs.version }})" >> $GITHUB_ENV
+      run: echo "BUILD_TAG=$(placeholder:0.1.0)" >> $GITHUB_ENV
     - name: Print Build Tag
       run: echo "$BUILD_TAG"
