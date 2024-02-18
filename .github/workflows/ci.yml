@@ -39,9 +39,10 @@ jobs:
     - name: "Set up Docker Buildx"
       uses: docker/setup-buildx-action@v2
     - name: Build and push
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v5
       with:
         push: true
+        platforms: linux/amd64,linux/arm64
         tags: |-
           ${{ env.IMAGE_REPOSITORY }}:${{ env.KEYCLOAK_VERSION }}-${{ env.VERSION }}
           ${{ env.IMAGE_REPOSITORY }}:latest
